@@ -20,4 +20,4 @@ fi
 
 mkdir "$NAME"
 shopt -s nullglob
-mv *.build *.buildinfo *.changes *.deb *.dsc *.debian.tar.xz *.orig.tar.gz{,.asc,.sig} "$NAME"
+mv *.build *.buildinfo *.changes *.deb *.dsc *.debian.tar.xz *.tar.gz{,.asc,.sig} "$NAME"
