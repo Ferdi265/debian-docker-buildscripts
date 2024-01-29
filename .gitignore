@@ -3,3 +3,6 @@
 
 # except scripts
 !scripts/
+
+# ignore .env file
+.env
