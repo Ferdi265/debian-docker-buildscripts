@@ -3,7 +3,7 @@ FROM $BASE
 
 # install debian build scripts
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential wget devscripts equivs lintian git-buildpackage \
     && rm -rf /var/lib/apt/lists/*
 
@@ -12,7 +12,7 @@ ARG PACKAGE
 ADD $PACKAGE /tmp/package-build-deps
 RUN apt-get update \
     && cd /tmp/package-build-deps \
-    && mk-build-deps -i -t "apt-get -y --no-install-recommends" \
+    && DEBIAN_FRONTEND=noninteractive mk-build-deps -i -t "apt-get -y --no-install-recommends" \
     && rm -rf /tmp/package-build-deps \
     && rm -rf /var/lib/apt/lists/*
 
