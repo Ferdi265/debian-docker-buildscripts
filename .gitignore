@@ -1,0 +1,8 @@
+# ignore every folder
+*/
+
+# except scripts
+!scripts/
+
+# ignore all orig.tar.gz archives
+*.orig.tar.gz
