@@ -1,4 +1,5 @@
 #!/bin/bash -e
 
 cd $PACKAGE
-gbp buildpackage --git-builder="debuild -i -I -us -uc"
+origtargz -u
+gbp buildpackage --git-debian-branch=main --git-builder="debuild -i -I -us -uc"
