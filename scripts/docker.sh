@@ -51,12 +51,21 @@ if [[ -z "${OPTIONS[--package]}" ]]; then
     ERROR=1
 fi
 
+if [[ ! -d "$BUILD_DIR/$PACKAGE" ]]; then
+    echo "error: package directory '$PACKAGE' not found" >&2
+    ERROR=1
+fi
+
 if [[ "$ERROR" -eq 1 ]]; then
     echo "usage: docker.sh --package PACKAGE [--base IMAGE] [cmd]" >&2
     exit 1
 fi
 
-# build and run container
+# prepare source package dir for clean build
 cd "$BUILD_DIR"
+export PACKAGE
+./scripts/clean.sh
+
+# build and run container
 sudo docker build "${BUILD_ARGS[@]}" -t debuild-$PACKAGE -f "$SCRIPT_DIR/Dockerfile" .
 sudo docker run --rm -it -v "$PWD:/src" --env-file=.env debuild-$PACKAGE "${ARGV[@]}"
