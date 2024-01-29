@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+BUILD_DIR="$(dirname "$SCRIPT_DIR")"
+
 ARGV=( "$@" )
 shift-argv() {
     ARGV=( "${ARGV[@]:1:${#ARGV[@]}}" )
@@ -37,7 +40,7 @@ while [[ ${#ARGV[@]} -ge 1 && "${ARGV[0]:0:1}" == "-" ]]; do
 
     case "$OPT" in
         --base) parse-opt && parse-arg && BUILD_ARGS+=("--build-arg" "BASE=$ARG");;
-        --package) parse-opt && parse-arg &&  BUILD_ARGS+=("--build-arg" "PACKAGE=$ARG");;
+        --package) parse-opt && parse-arg &&  BUILD_ARGS+=("--build-arg" "PACKAGE=$ARG") && PACKAGE=$ARG;;
         --) break;;
         *) echo "error: invalid option '$OPT'" >&2; ERROR=1;;
     esac
@@ -54,5 +57,6 @@ if [[ "$ERROR" -eq 1 ]]; then
 fi
 
 # build and run container
-echo sudo docker build "${BUILD_ARGS[@]}" -t wl-mirror-debuild .
-echo sudo docker run --rm -it -v "$PWD:/src" --env-file=.env wl-mirror-debuild "${ARGV[@]}"
+cd "$BUILD_DIR"
+sudo docker build "${BUILD_ARGS[@]}" -t debuild-$PACKAGE -f "$SCRIPT_DIR/Dockerfile" .
+sudo docker run --rm -it -v "$PWD:/src" --env-file=.env debuild-$PACKAGE "${ARGV[@]}"

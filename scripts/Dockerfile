@@ -1,18 +1,20 @@
 ARG BASE=debian:unstable
-ARG PACKAGE
 FROM $BASE
 
 # install debian build scripts
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        build-essential wget devscripts lintian git-buildpackage \
+        build-essential wget devscripts equivs lintian git-buildpackage \
     && rm -rf /var/lib/apt/lists/*
 
 # install build dependencies
+ARG PACKAGE
 ADD $PACKAGE /tmp/package-build-deps
-RUN cd /tmp/package-build-deps \
-    && mk-build-deps -i \
-    && rm -rf /tmp/package-build-deps
+RUN apt-get update \
+    && cd /tmp/package-build-deps \
+    && mk-build-deps -i -t "apt-get -y --no-install-recommends" \
+    && rm -rf /tmp/package-build-deps \
+    && rm -rf /var/lib/apt/lists/*
 
 # set up user account
 RUN passwd -d root \
@@ -22,7 +24,8 @@ USER user
 
 # set up mounted source volume
 VOLUME /src
-WORKDIR /src/$PACKAGE
+WORKDIR /src
+ENV PACKAGE=$PACKAGE
 
 # build debian package
-CMD gpb buildpackage
+CMD scripts/build.sh
