@@ -10,7 +10,4 @@ cd $PACKAGE
 origtargz -u
 
 # build
-gbp buildpackage \
-    --git-debian-branch=main \
-    --git-ignore-new \
-    --git-builder="debuild -i -I -us -uc"
+debuild -i -I -us -uc
