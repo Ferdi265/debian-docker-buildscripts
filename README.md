@@ -15,6 +15,3 @@ non-Debian system via Docker.
 
 These scripts are intended for Debian packages with a bare `debian/` folder
 that a `.orig.tar.gz` source tarball can be extracted over.
-
-The invocation of `git-buildpackage` also assumes the main branch is named
-`main` instead of `master`.
