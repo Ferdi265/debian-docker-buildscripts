@@ -18,8 +18,8 @@ RUN apt-get update \
 
 # set up user account
 RUN passwd -d root \
-    && groupadd -g 1000 user \
-    && useradd -u 1000 -g 1000 -s /bin/bash -d /tmp/ user
+    && groupadd -o -g 1000 user \
+    && useradd -o -u 1000 -g 1000 -s /bin/bash -d /tmp/ user
 USER user
 
 # set up mounted source volume
