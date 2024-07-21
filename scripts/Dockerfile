@@ -4,7 +4,7 @@ FROM $BASE
 # install debian build scripts
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential wget devscripts equivs lintian git-buildpackage \
+        build-essential wget devscripts equivs lintian licenserecon sbuild piuparts git-buildpackage \
     && rm -rf /var/lib/apt/lists/*
 
 # install build dependencies
