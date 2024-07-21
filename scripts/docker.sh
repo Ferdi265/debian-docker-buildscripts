@@ -34,6 +34,7 @@ parse-arg() {
 }
 
 BUILD_ARGS=()
+RUN_ARGS=()
 while [[ ${#ARGV[@]} -ge 1 && "${ARGV[0]:0:1}" == "-" ]]; do
     OPT="${ARGV[0]}"
     shift-argv
@@ -41,6 +42,7 @@ while [[ ${#ARGV[@]} -ge 1 && "${ARGV[0]:0:1}" == "-" ]]; do
     case "$OPT" in
         --base) parse-opt && parse-arg && BUILD_ARGS+=("--build-arg" "BASE=$ARG");;
         --package) parse-opt && parse-arg &&  BUILD_ARGS+=("--build-arg" "PACKAGE=$ARG") && PACKAGE=$ARG;;
+        --privileged) parse-opt && RUN_ARGS+=("--privileged");;
         --) break;;
         *) echo "error: invalid option '$OPT'" >&2; ERROR=1;;
     esac
@@ -68,4 +70,4 @@ export PACKAGE
 
 # build and run container
 sudo docker build "${BUILD_ARGS[@]}" -t debuild-$PACKAGE -f "$SCRIPT_DIR/Dockerfile" .
-sudo docker run --rm -it -v "$PWD:/src" --env-file=.env debuild-$PACKAGE "${ARGV[@]}"
+sudo docker run "${RUN_ARGS[@]}" --rm -it -v "$PWD:/src" --env-file=.env debuild-$PACKAGE "${ARGV[@]}"
