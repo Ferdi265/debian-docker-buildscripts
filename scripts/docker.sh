@@ -40,6 +40,7 @@ while [[ ${#ARGV[@]} -ge 1 && "${ARGV[0]:0:1}" == "-" ]]; do
     shift-argv
 
     case "$OPT" in
+        --pull) parse-opt && BUILD_ARGS+=("--pull");;
         --base) parse-opt && parse-arg && BUILD_ARGS+=("--build-arg" "BASE=$ARG");;
         --package) parse-opt && parse-arg &&  BUILD_ARGS+=("--build-arg" "PACKAGE=$ARG") && PACKAGE=$ARG;;
         --privileged) parse-opt && RUN_ARGS+=("--privileged");;
